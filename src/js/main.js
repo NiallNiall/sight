@@ -9,17 +9,35 @@
     // Create an empty project and a view for the canvas:
     paper.setup(canvas);
     // Create a Paper.js Path to draw a line into it:
-    var path = new paper.Path();
-    // Give the stroke a color
-    path.strokeColor = 'black';
-    var start = new paper.Point(100, 100);
-    // Move to start and draw a line from there
-    path.moveTo(start);
-    // Note that the plus operator on Point objects does not work
-    // in JavaScript. Instead, we need to call the add() function:
-    path.lineTo(start.add([ 200, -50 ]));
+    // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
+    // myCircle.fillColor = 'black';
+
+
+
+    var dog = createStep();
+    console.log(dog.position());
+
+    var dog2 = createStep();
+    console.log(dog2.position());
+    // dog2.triggerEvent();
+
+    paper.view.onFrame = function(event) {
+      // On each frame, rotate the path by 3 degrees:
+      // dog.drawStep();
+    }
+
+    var mouseTool = new paper.Tool();
+
+   mouseTool.onMouseDown = function(event) {
+    // console.log(event.point);
+      var myCircle = new paper.Path.Circle(event.point, 5);
+      myCircle.fillColor = 'black';
+    }
+
+
     // Draw the view now:
     paper.view.draw();
+
   }
 
 

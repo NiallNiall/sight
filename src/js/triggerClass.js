@@ -1,43 +1,113 @@
-
 function createTrigger() {
-  var privateAvailable = false;
+
+  var available = true;
 
   var trigger = {
-    available: false,
-    sendMessage: sendMessage,
+    available: true,
+    triggerEvent: triggerEvent,
+    triggerOff: triggerOff,
+    triggerOn: triggerOn,
     getPrivateAvailable: getPrivateAvailable
   };
 
   return trigger;
 
+  function triggerEvent() {
+
+    if(available){
+      sendMessage();
+      triggerOff();
+    }
+
+  }
+
   function sendMessage() {
-      console.log("send Message!");
+    console.log("send Message!");
+  }
+
+  function triggerOff() {
+    available = false;
+  }
+
+  function triggerOn() {
+    available = True;
   }
 
   function getPrivateAvailable() {
-    return privateAvailable;
+    return available;
   }
+
+}
+
+// =====================================================
+// =====================================================
+
+
+function createStep() {
+
+    // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
+    // myCircle.fillColor = 'black';
+
+    // var position
+
+    var trigger = createTrigger();
+
+    var position = paper.Point.random().multiply(new paper.Point(paper.view.bounds.width, paper.view.bounds.height)); //new paper.Point(100,200);
+    var myCircle = new paper.Path.Circle(position, 10);
+    myCircle.fillColor = 'black';
+
+
+  var step = {
+    position: getPosition,
+    // stepTrig: createTrigger,
+    radius: Math.random() * 100,
+    distanceTest: distanceTest,
+    drawStep: drawStep
+  }
+
+  return step;
+
+  function drawStep(){
+  }
+
+  function getPosition() {
+    return position;
+  }
+
+  function distanceTest(testPosition) {
+
+    var distGap = position.subtract(testPosition);
+    console.log(distGap);
+
+    if(distMag < 50) {
+      trigger.triggerEvent();
+    } else {
+      trigger.triggerOn();
+    }
+  }
+
 }
 
 
-function createDog() {
-  var dog = createTrigger();
-
-  dog.bark = function(){
-      console.log("Woof!");
-  };
-
-  return dog;
-}
-
-
-var obj = {};
 
 
 
-var dog = createDog();
-dog.bark();
-dog.sendMessage();
+// function createSnareTrigger() {
+
+//   var snare = createTrigger();
+
+//   snare.bark = function(){
+//       console.log("Woof!");
+//   };
+
+//   return snare;
+// }
+
+
+
+// var dog = createDog();
+// dog.bark();
+// dog.sendMessage();
 
 
 
