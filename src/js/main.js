@@ -21,3 +21,10 @@
     // Draw the view now:
     paper.view.draw();
   }
+
+
+// var step1 = new drumStep();
+// var person2 = new Trigger("UltraTrig");
+
+// person1.triggerEvent();
+// person2.triggerEvent();
