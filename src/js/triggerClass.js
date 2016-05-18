@@ -43,7 +43,7 @@ function createTrigger() {
 // =====================================================
 
 
-function createStep() {
+function createStep(constructPos) {
 
     // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
     // myCircle.fillColor = 'black';
@@ -52,9 +52,11 @@ function createStep() {
 
     var trigger = createTrigger();
 
-    var position = paper.Point.random().multiply(new paper.Point(paper.view.bounds.width, paper.view.bounds.height)); //new paper.Point(100,200);
+    var position = constructPos;
+
+    // var position = paper.Point.random().multiply(new paper.Point(paper.view.bounds.width, paper.view.bounds.height)); //new paper.Point(100,200);
     var myCircle = new paper.Path.Circle(position, 10);
-    myCircle.fillColor = 'black';
+    myCircle.fillColor = 'Tomato';
 
 
   var step = {
