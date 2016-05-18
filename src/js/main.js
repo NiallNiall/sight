@@ -21,20 +21,22 @@ paper.install(window);
     // myCircle.fillColor = 'black';
 
 
-    var getCirclePos = function(centerPos, inc, Radius) {
+    var phRadius = 200;
 
+    var getCirclePos = function(centerPos, inc, Radius) {
       var angle = Math.radians(inc);
       var x = centerPos.x + Math.sin(angle) * Radius;
       var y = centerPos.y + Math.cos(angle) * Radius;
-
       var pos = new paper.Point(x,y);
-
       return pos;
-
     }
 
 
     var rotrPos = new paper.Point(paper.view.center);
+
+    var playHeadPath = new paper.Path.Circle(paper.view.center, phRadius);
+    playHeadPath.strokeColor = 'NavajoWhite';
+    playHeadPath.strokeWidth = 5.0;
 
     var playHead = new paper.Path.Circle(rotrPos, 20);
     playHead.fillColor = 'LightSlateGray';
@@ -42,7 +44,7 @@ paper.install(window);
    var countr = 1;
 
 
-    var dog = createStep();
+    var p1 = createStep(new paper.Point(paper.view.center.x, paper.view.center.y - phRadius));
     // console.log(dog.position());
 
     // var dog2 = createStep();
@@ -55,7 +57,9 @@ paper.install(window);
 
       countr +=2;
 
-      var rotrPos = getCirclePos(paper.view.center, countr, 200);
+      var rotrPos = getCirclePos(paper.view.center, countr, phRadius);
+
+      p1.distanceTest(rotrPos);
 
       // rotrPos.x +=1;
       // rotrPos.y +=1;

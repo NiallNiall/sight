@@ -30,7 +30,7 @@ function createTrigger() {
   }
 
   function triggerOn() {
-    available = True;
+    available = true;
   }
 
   function getPrivateAvailable() {
@@ -45,6 +45,8 @@ function createTrigger() {
 
 function createStep(constructPos) {
 
+  var clr1 = 'Tomato';
+
     // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
     // myCircle.fillColor = 'black';
 
@@ -56,7 +58,7 @@ function createStep(constructPos) {
 
     // var position = paper.Point.random().multiply(new paper.Point(paper.view.bounds.width, paper.view.bounds.height)); //new paper.Point(100,200);
     var myCircle = new paper.Path.Circle(position, 10);
-    myCircle.fillColor = 'Tomato';
+    myCircle.fillColor = clr1;
 
 
   var step = {
@@ -79,12 +81,14 @@ function createStep(constructPos) {
   function distanceTest(testPosition) {
 
     var distGap = position.subtract(testPosition);
-    console.log(distGap);
+    // console.log(distGap.length);
 
-    if(distMag < 50) {
+    if(distGap.length < 50) {
       trigger.triggerEvent();
+      myCircle.fillColor = 'Black';
     } else {
       trigger.triggerOn();
+      myCircle.fillColor = clr1;
     }
   }
 
