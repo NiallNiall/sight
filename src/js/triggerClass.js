@@ -2,12 +2,26 @@ function createTrigger() {
 
   var available = true;
 
+  function randomNote()
+  {
+      var text = "";
+      var possible = "CEGA";
+
+      for( var i=0; i < 1; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+  }
+
+  var pitch = randomNote();
+
   var trigger = {
     available: true,
     triggerEvent: triggerEvent,
     triggerOff: triggerOff,
     triggerOn: triggerOn,
-    getPrivateAvailable: getPrivateAvailable
+    getPrivateAvailable: getPrivateAvailable,
+    setPitch: setPitch
   };
 
   return trigger;
@@ -23,6 +37,9 @@ function createTrigger() {
 
   function sendMessage() {
     console.log("send Message!");
+
+    //play a middle c for the duration of an 8th note
+    synth.triggerAttackRelease(pitch + "4", "16n");
   }
 
   function triggerOff() {
@@ -35,6 +52,10 @@ function createTrigger() {
 
   function getPrivateAvailable() {
     return available;
+  }
+
+  function setPitch(){
+
   }
 
 }
@@ -83,12 +104,15 @@ function createStep(constructPos) {
     var distGap = position.subtract(testPosition);
     // console.log(distGap.length);
 
-    if(distGap.length < 50) {
+    if(distGap.length < 25) {
       trigger.triggerEvent();
-      myCircle.fillColor = 'Black';
+      // myCircle.fillColor = 'Black';
+      myCircle.strokeColor = 'NavajoWhite';
+      myCircle.strokeWidth = 15.0;
     } else {
       trigger.triggerOn();
       myCircle.fillColor = clr1;
+      myCircle.strokeColor = null;
     }
   }
 

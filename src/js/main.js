@@ -8,6 +8,11 @@ Math.radians = function(degrees) {
   return degrees * Math.PI / 180;
 };
 
+//create one of Tone's built-in synthesizers and connect it to the master output
+var synth = new Tone.SimpleSynth().toMaster();
+synth.oscillator.type = "sine";
+// console.log(synth.oscillator.type);
+
 
 paper.install(window);
   // Only executed our code once the DOM is ready.
@@ -41,15 +46,11 @@ paper.install(window);
     var playHead = new paper.Path.Circle(rotrPos, 20);
     playHead.fillColor = 'LightSlateGray';
 
-   var countr = 1;
+    var countr = 1;
 
+    var allSteps = [];
 
-    var p1 = createStep(new paper.Point(paper.view.center.x, paper.view.center.y - phRadius));
-    // console.log(dog.position());
-
-    // var dog2 = createStep();
-    // console.log(dog2.position());
-    // dog2.triggerEvent();
+    var counttt = 1;
 
     paper.view.onFrame = function(event) {
       // On each frame, rotate the path by 3 degrees:
@@ -59,12 +60,14 @@ paper.install(window);
 
       var rotrPos = getCirclePos(paper.view.center, countr, phRadius);
 
-      p1.distanceTest(rotrPos);
-
-      // rotrPos.x +=1;
-      // rotrPos.y +=1;
-
       playHead.position = rotrPos;
+
+
+      counttt +=1;
+      for(var i =0; i<allSteps.length; i++){
+        // console.log(counttt);
+        allSteps[i].distanceTest(rotrPos);
+      }
 
     }
 
@@ -72,7 +75,11 @@ paper.install(window);
 
    mouseTool.onMouseDown = function(event) {
 
-    var dog = createStep(event.point);
+    var newStep = createStep(event.point);
+    allSteps.push(newStep);
+
+    // console.log(allSteps);
+
     // console.log(event.point);
       // var myCircle = new paper.Path.Circle(event.point, 5);
       // myCircle.fillColor = 'black';
