@@ -11,6 +11,10 @@ Math.radians = function(degrees) {
 //create one of Tone's built-in synthesizers and connect it to the master output
 var synth = new Tone.SimpleSynth().toMaster();
 synth.oscillator.type = "sine";
+
+var snare = new Tone.SimpleSynth().toMaster();
+snare.oscillator.type = "triangle";
+
 // console.log(synth.oscillator.type);
 
 
@@ -25,6 +29,8 @@ paper.install(window);
     // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
     // myCircle.fillColor = 'black';
 
+
+    var selectr = 1;
 
     var phRadius = 200;
 
@@ -71,19 +77,43 @@ paper.install(window);
 
     }
 
-    var mouseTool = new paper.Tool();
+      var mouseTool = new paper.Tool();
 
-   mouseTool.onMouseDown = function(event) {
+    mouseTool.onMouseDown = function(event) {
 
-    var newStep = createStep(event.point);
-    allSteps.push(newStep);
+      switch(selectr) {
+          case 1:
+                    var newStep = createKick(event.point);
+              break;
+          case 2:
+                    var newStep = createSnare(event.point);
+              break;
+          default:
+                    var newStep = createKick(event.point);
+      }
 
-    // console.log(allSteps);
+         allSteps.push(newStep);
 
-    // console.log(event.point);
-      // var myCircle = new paper.Path.Circle(event.point, 5);
-      // myCircle.fillColor = 'black';
     }
+
+
+    mouseTool.onKeyDown = function(event) {
+
+       switch(event.key) {
+          case '1':
+                          selectr = 1;
+              break;
+          case '2':
+                          selectr = 2;
+              break;
+          default:
+                   selectr = 1;
+      }
+
+    }
+
+
+
 
 
     // Draw the view now:

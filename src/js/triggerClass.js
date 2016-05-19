@@ -64,22 +64,19 @@ function createTrigger() {
 // =====================================================
 
 
-function createStep(constructPos) {
+function createStep(constructPos, clr) {
 
-  var clr1 = 'Tomato';
+  var clr1 = clr;
 
-    // var myCircle = new paper.Path.Circle(new paper.Point(100, 70), 50);
-    // myCircle.fillColor = 'black';
-
-    // var position
 
     var trigger = createTrigger();
 
     var position = constructPos;
+    var myCircle = new paper.Path;
 
-    // var position = paper.Point.random().multiply(new paper.Point(paper.view.bounds.width, paper.view.bounds.height)); //new paper.Point(100,200);
-    var myCircle = new paper.Path.Circle(position, 10);
-    myCircle.fillColor = clr1;
+    function createShape(shape){
+      myCircle = shape;
+    }
 
 
   var step = {
@@ -87,12 +84,14 @@ function createStep(constructPos) {
     // stepTrig: createTrigger,
     radius: Math.random() * 100,
     distanceTest: distanceTest,
-    drawStep: drawStep
+    drawStep: drawStep,
+    createShape: createShape
   }
 
   return step;
 
   function drawStep(){
+
   }
 
   function getPosition() {
@@ -115,6 +114,40 @@ function createStep(constructPos) {
       myCircle.strokeColor = null;
     }
   }
+
+}
+
+function createSnare(constructPos) {
+
+    var snareStep = createStep(constructPos, 'Tomato');
+
+    function createShape(constructPos) {
+      var myShape = new paper.Path.Circle(constructPos, 10);
+      return myShape;
+    }
+
+    var myShape = createShape(constructPos);
+    snareStep.createShape(myShape);
+
+    return snareStep;
+
+}
+
+function createKick(constructPos) {
+
+    var kickStep = createStep(constructPos, 'DarkCyan');
+
+    radius = 20;
+
+    function createShape(constructPos) {
+      var myShape = new paper.Path.Rectangle(constructPos.subtract(radius/2), radius);
+      return myShape;
+    }
+
+    var myShape = createShape(constructPos);
+    kickStep.createShape(myShape);
+
+    return kickStep;
 
 }
 
