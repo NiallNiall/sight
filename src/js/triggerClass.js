@@ -2,18 +2,18 @@ function createTrigger() {
 
   var available = true;
 
-  function randomNote()
-  {
-      var text = "";
-      var possible = "CEGA";
+  // function randomNote()
+  // {
+  //     var text = "";
+  //     var possible = "CEGA";
 
-      for( var i=0; i < 1; i++ )
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
+  //     for( var i=0; i < 1; i++ )
+  //         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
-      return text;
-  }
+  //     return text;
+  // }
 
-  var pitch = randomNote();
+  // var pitch = randomNote();
 
   var trigger = {
     available: true,
@@ -26,9 +26,10 @@ function createTrigger() {
 
   return trigger;
 
-  function triggerEvent() {
+  function triggerEvent(trigEventVar) {
 
     if(available){
+      trigEventVar();
       sendMessage();
       triggerOff();
     }
@@ -36,10 +37,8 @@ function createTrigger() {
   }
 
   function sendMessage() {
-    console.log("send Message!");
-
-    //play a middle c for the duration of an 8th note
-    synth.triggerAttackRelease(pitch + "4", "16n");
+    // console.log("Note Triggered!");
+    // synthVar.triggerAttackRelease("16n");
   }
 
   function triggerOff() {
@@ -58,6 +57,10 @@ function createTrigger() {
 
   }
 
+  function setSynth(synthVar){
+
+  }
+
 }
 
 // =====================================================
@@ -66,8 +69,14 @@ function createTrigger() {
 
 function createStep(constructPos, clr) {
 
-  var clr1 = clr;
+    var trigEvent = function(){
+    };
 
+    var setTrigEvent = function(trigEventVar) {
+      trigEvent = trigEventVar;
+    }
+
+    var clr1 = clr;
 
     var trigger = createTrigger();
 
@@ -85,7 +94,8 @@ function createStep(constructPos, clr) {
     radius: Math.random() * 100,
     distanceTest: distanceTest,
     drawStep: drawStep,
-    createShape: createShape
+    createShape: createShape,
+    setTrigEvent: setTrigEvent
   }
 
   return step;
@@ -104,7 +114,7 @@ function createStep(constructPos, clr) {
     // console.log(distGap.length);
 
     if(distGap.length < 25) {
-      trigger.triggerEvent();
+      trigger.triggerEvent(trigEvent);
       // myCircle.fillColor = 'Black';
       myCircle.strokeColor = 'NavajoWhite';
       myCircle.strokeWidth = 15.0;
@@ -122,9 +132,16 @@ function createSnare(constructPos) {
     var snareStep = createStep(constructPos, 'Tomato');
 
     function createShape(constructPos) {
-      var myShape = new paper.Path.Circle(constructPos, 10);
+      var myShape = new paper.Path.Rectangle(constructPos.subtract(radius/2), radius);
       return myShape;
     }
+
+    var trigEventVar = function(){
+      console.log("Snare Triggered!");
+      snare.triggerAttackRelease("32n");
+    }
+
+    snareStep.setTrigEvent(trigEventVar);
 
     var myShape = createShape(constructPos);
     snareStep.createShape(myShape);
@@ -140,9 +157,16 @@ function createKick(constructPos) {
     radius = 20;
 
     function createShape(constructPos) {
-      var myShape = new paper.Path.Rectangle(constructPos.subtract(radius/2), radius);
+      var myShape = new paper.Path.Circle(constructPos, 10);
       return myShape;
     }
+
+    var trigEventVar = function(){
+      console.log("Kick Triggered!");
+        kick.triggerAttackRelease("C2", "32n");
+    }
+
+    kickStep.setTrigEvent(trigEventVar);
 
     var myShape = createShape(constructPos);
     kickStep.createShape(myShape);
@@ -151,6 +175,35 @@ function createKick(constructPos) {
 
 }
 
+
+function createPulse(constructPos) {
+
+    var kickStep = createStep(constructPos, 'DarkCyan');
+    radius = 20;
+
+
+    var trigEventVar = function(){
+      // console.log("Kick Triggered!");
+        synth.triggerAttackRelease("C4", "32n");
+    }
+
+    kickStep.setTrigEvent(trigEventVar);
+
+    function createShape(constructPos) {
+      var from = new Point(view.center.x, view.center.y);
+      var to = new Point(constructPos.x, constructPos.y);
+      var path = new Path.Line(from, to);
+      path.strokeColor = 'Blue';
+      path.strokeWidth = '5.0';
+      return path;
+    }
+
+    var myShape = createShape(constructPos);
+    kickStep.createShape(myShape);
+
+    return kickStep;
+
+}
 
 
 

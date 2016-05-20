@@ -12,9 +12,14 @@ Math.radians = function(degrees) {
 var synth = new Tone.SimpleSynth().toMaster();
 synth.oscillator.type = "sine";
 
-var snare = new Tone.SimpleSynth().toMaster();
-snare.oscillator.type = "triangle";
+// var synth = new Tone.DrumSynth().toMaster();
+// synth.triggerAttackRelease("C2", "8n");
 
+var snare = new Tone.NoiseSynth().toMaster();
+// snare.triggerAttackRelease("8n");
+// snare.oscillator.type = "triangle";
+
+var kick = new Tone.DrumSynth().toMaster();
 // console.log(synth.oscillator.type);
 
 
@@ -88,6 +93,9 @@ paper.install(window);
           case 2:
                     var newStep = createSnare(event.point);
               break;
+          case 3:
+                    var newStep = createPulse(event.point);
+              break;
           default:
                     var newStep = createKick(event.point);
       }
@@ -105,6 +113,9 @@ paper.install(window);
               break;
           case '2':
                           selectr = 2;
+              break;
+          case '3':
+                          selectr = 3;
               break;
           default:
                    selectr = 1;
