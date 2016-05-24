@@ -60,6 +60,7 @@ paper.install(window);
     var countr = 1;
 
     var allSteps = [];
+    var movrs = [];
 
     var counttt = 1;
 
@@ -80,6 +81,12 @@ paper.install(window);
         allSteps[i].distanceTest(rotrPos);
       }
 
+      for(var i =0; i<movrs.length; i++){
+        // console.log(counttt);
+        movrs[i].loop(rotrPos);
+        // console.log(movrs);
+      }
+
     }
 
       var mouseTool = new paper.Tool();
@@ -89,18 +96,26 @@ paper.install(window);
       switch(selectr) {
           case 1:
                     var newStep = createKick(event.point);
+                    allSteps.push(newStep);
               break;
           case 2:
                     var newStep = createSnare(event.point);
+                    allSteps.push(newStep);
               break;
           case 3:
                     var newStep = createPulse(event.point);
+                    allSteps.push(newStep);
+              break;
+          case 4:
+                    var newStep = createMovr(event.point);
+                    movrs.push(newStep);
               break;
           default:
                     var newStep = createKick(event.point);
+                    allSteps.push(newStep);
       }
 
-         allSteps.push(newStep);
+         // allSteps.push(newStep);
 
     }
 
@@ -116,6 +131,9 @@ paper.install(window);
               break;
           case '3':
                           selectr = 3;
+              break;
+          case '4':
+                          selectr = 4;
               break;
           default:
                    selectr = 1;

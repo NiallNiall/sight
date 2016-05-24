@@ -205,6 +205,40 @@ function createPulse(constructPos) {
 
 }
 
+function createMovr(constructPos) {
+
+  var myShape = new paper.Path();
+
+   var movr = {
+    shape: thisShape,
+    create: create,
+    loop: loop,
+    start: start
+  }
+  // create(constructPos);
+
+  var thisShape = create(constructPos);
+
+  function create(constructPos) {
+    myShape = new paper.Path.Circle(constructPos, 10);
+    myShape.fillColor = 'SaddleBrown';
+
+    return myShape;
+  }
+
+  function loop() {
+    thisShape.position.x += 1;
+  }
+
+  function start() {
+    thisShape.position.x += 1;
+  }
+
+
+  return movr;
+
+}
+
 
 
 
