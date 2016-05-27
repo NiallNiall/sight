@@ -130,6 +130,7 @@ function createStep(constructPos, clr) {
 function createSnare(constructPos) {
 
     var snareStep = createStep(constructPos, 'Tomato');
+    radius = 20;
 
     function createShape(constructPos) {
       var myShape = new paper.Path.Rectangle(constructPos.subtract(radius/2), radius);
@@ -153,7 +154,6 @@ function createSnare(constructPos) {
 function createKick(constructPos) {
 
     var kickStep = createStep(constructPos, 'DarkCyan');
-
     radius = 20;
 
     function createShape(constructPos) {
@@ -208,6 +208,11 @@ function createPulse(constructPos) {
 function createMovr(constructPos) {
 
   var myShape = new paper.Path();
+  var originalPos = constructPos;
+
+  var movng = false;
+
+  var life = 1;
 
    var movr = {
     shape: thisShape,
@@ -222,18 +227,40 @@ function createMovr(constructPos) {
   function create(constructPos) {
     myShape = new paper.Path.Circle(constructPos, 10);
     myShape.fillColor = 'SaddleBrown';
-
     return myShape;
+    // movng = true;
   }
 
-  function loop() {
-    thisShape.position.x += 1;
+  function loop(rotrPos) {
+    if(movng){
+      thisShape.position.x = originalPos.x + life;
+      thisShape.position.y = originalPos.y + life;
+      life += 3;
+      if(life >= 50){
+        movng = false;
+      }
+      // console.log(originalPos);
+    }
+
+    distanceTest(rotrPos);
   }
 
   function start() {
-    thisShape.position.x += 1;
+    movng = true;
   }
 
+
+function distanceTest(testPosition) {
+
+    var distGap = thisShape.position.subtract(testPosition);
+    // console.log(distGap.length);
+
+    if(distGap.length < 25) {
+      start();
+    } else {
+
+    }
+  }
 
   return movr;
 

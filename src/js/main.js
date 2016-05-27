@@ -36,6 +36,7 @@ paper.install(window);
 
 
     var selectr = 1;
+    var oldSelector = 1;
 
     var phRadius = 200;
 
@@ -64,6 +65,8 @@ paper.install(window);
 
     var counttt = 1;
 
+
+
     paper.view.onFrame = function(event) {
       // On each frame, rotate the path by 3 degrees:
       // dog.drawStep();
@@ -87,7 +90,20 @@ paper.install(window);
         // console.log(movrs);
       }
 
+      if(selectr == oldSelector) {
+        // Do NOTHING
+      } else {
+        console.log("selector changed to " + selectr);
+        selectionIcon();
+      }
+      oldSelector = selectr;
     }
+
+
+
+
+
+
 
       var mouseTool = new paper.Tool();
 
@@ -117,6 +133,66 @@ paper.install(window);
 
          // allSteps.push(newStep);
 
+    }
+
+
+
+     var bgRadius = 50;
+      var selectedIconPoint = new paper.Point(bgRadius, bgRadius);
+      var selectedBackground = new paper.Path.Rectangle(selectedIconPoint.subtract(bgRadius/2), bgRadius);
+      selectedBackground.fillColor = 'DimGray';
+
+            var selectedIcon = new paper.Path.Circle(selectedIconPoint, 10);
+      selectedIcon.fillColor ='DarkCyan';
+
+
+    var selectionIcon = function() {
+
+
+      // var selectedIcon = new paper.Path.Circle(selectedIconPoint, 10);
+      // selectedIcon.fillColor ='Tomato';
+      // selectedBackground.strokeColor = 'Gray';
+      // selectedBackground.strokeWidth = 5.0;
+
+
+
+      switch(selectr) {
+          case 1:
+                 console.log("1");
+                 selectedIcon.remove();
+                selectedIcon = new paper.Path.Circle(selectedIconPoint, 10);
+                  selectedIcon.fillColor ='DarkCyan';
+
+              break;
+          case 2:
+                 console.log("2");
+                 var rectRadius = 20;
+                 selectedIcon.remove();
+                 selectedIcon = new paper.Path.Rectangle(
+                    selectedIconPoint.subtract(rectRadius/2),
+                    rectRadius
+                  );
+                  selectedIcon.fillColor ='Tomato';
+              break;
+          case 3:
+                 console.log("3");
+                  var rectRadius = 25;
+                 selectedIcon.remove();
+                 selectedIcon = new paper.Path.Rectangle(
+                    new paper.Point(selectedIconPoint.x - rectRadius/2, selectedIconPoint.y - (rectRadius)),
+                    new paper.Point(selectedIconPoint.x + rectRadius/2, selectedIconPoint.y +(rectRadius))
+                  );
+                  selectedIcon.fillColor ='NavajoWhite';
+              break;
+          case 4:
+                 console.log("4");
+                 selectedIcon.remove();
+                selectedIcon = new paper.Path.Circle(selectedIconPoint, 10);
+                  selectedIcon.fillColor ='SaddleBrown';
+              break;
+          default:
+                 console.log("0");
+      }
     }
 
 
