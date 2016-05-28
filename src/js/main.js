@@ -67,6 +67,18 @@ paper.install(window);
 
 
 
+
+    // for(var i =0; i < 100 ; i++){
+
+    //   var distr = easeInOutExpo(i, 0, 200, 100);
+    //   var from = new paper.Point(i*5,0);
+    //   var to = new paper.Point(i*5, distr);
+    //   var path = new Path.Line(from, to);
+    //   path.strokeColor = 'Tomato';
+    //   path.strokeWidth = '1.0';
+    // }
+
+
     paper.view.onFrame = function(event) {
       // On each frame, rotate the path by 3 degrees:
       // dog.drawStep();

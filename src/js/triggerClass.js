@@ -210,6 +210,23 @@ function createMovr(constructPos) {
   var myShape = new paper.Path();
   var originalPos = constructPos;
 
+  var center = paper.view.center;
+  // console.log(center);
+
+  var norm = constructPos.subtract(center);
+  var normed = norm.normalize();
+
+  var dest = new paper.Point(originalPos.x + normed.x * 100, originalPos.y + normed.y * 100);
+
+  var from = originalPos;
+  var to = dest;
+  var movePath = new Path.Line(from, to);
+  movePath.strokeColor = 'NavajoWhite';
+  movePath.strokeWidth = '5.0';
+
+
+  // console.log(normed);
+
   var movng = false;
 
   var life = 1;
@@ -231,12 +248,23 @@ function createMovr(constructPos) {
     // movng = true;
   }
 
+  var dist = 0;
+
   function loop(rotrPos) {
     if(movng){
-      thisShape.position.x = originalPos.x + life;
-      thisShape.position.y = originalPos.y + life;
-      life += 3;
-      if(life >= 50){
+      dist = easeOutExpo(life, 0, 100, 100)
+      var newPos = new paper.Point(originalPos.x + (normed.x * dist), originalPos.y + (normed.y * dist));
+      var startPos = new paper.Point(originalPos.x - (normed.x * dist), originalPos.y - (normed.y * dist));
+      movePath.segments[1].point = newPos;
+      movePath.segments[0].point = startPos;
+      // console.log(movePath.segments[1].point);
+      thisShape.position = newPos;
+
+      life += 1;
+      if(dist >= 100){
+        // dist = 0;
+        life = 0;
+        thisShape.position = originalPos;
         movng = false;
       }
       // console.log(originalPos);
@@ -246,13 +274,14 @@ function createMovr(constructPos) {
   }
 
   function start() {
+    life = 0;
     movng = true;
   }
 
 
 function distanceTest(testPosition) {
 
-    var distGap = thisShape.position.subtract(testPosition);
+    var distGap = originalPos.subtract(testPosition);
     // console.log(distGap.length);
 
     if(distGap.length < 25) {
@@ -267,6 +296,23 @@ function distanceTest(testPosition) {
 }
 
 
+// t: current time, b: begInnIng value, c: change In value, d: duration
+function easeInQuad(t, b, c, d) {
+    return c*(t/=d)*t + b;
+}
+
+function easeInOutExpo(t, b, c, d) {
+    if (t==0) return b;
+    if (t==d) return b+c;
+    if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
+    return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
+  }
+function easeInExpo(t, b, c, d) {
+    return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
+  }
+function  easeOutExpo(t, b, c, d) {
+    return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+  }
 
 
 // function createSnareTrigger() {
