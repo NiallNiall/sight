@@ -296,6 +296,17 @@ function distanceTest(testPosition) {
 }
 
 
+
+function createTriangr(constructPos) {
+
+    var triangR = createMovr(constructPos, 'DarkCyan');
+
+
+    return triangR;
+
+}
+
+
 // t: current time, b: begInnIng value, c: change In value, d: duration
 function easeInQuad(t, b, c, d) {
     return c*(t/=d)*t + b;
