@@ -101,7 +101,11 @@ function createStep(constructPos, clr) {
     setTrigEvent: setTrigEvent,
     checkDistance: checkDistance,
     triggerEvent: triggerEvent,
-    available: available
+    available: available,
+    getAvail: getAvail,
+    setAvail: setAvail,
+    getOldAvail: getOldAvail,
+    setOldAvail: setOldAvail
   }
 
   return step;
@@ -119,6 +123,19 @@ function createStep(constructPos, clr) {
     return rtnavail;
   }
 
+  function setAvail(availBit){
+    available = availBit;
+  }
+
+  function getOldAvail(){
+    var rtnavail = oldAvailable;
+    return rtnavail;
+  }
+
+  function setOldAvail(availBit){
+    oldAvailable = availBit;
+  }
+
   function checkDistance(testPosition) {
 
     var distGap = position.subtract(testPosition);
@@ -127,22 +144,25 @@ function createStep(constructPos, clr) {
     if(distGap.length < 25) {
       testResult = true;
       // trigger.triggerEvent(trigEvent);
-      available = false;
+      myCircle.strokeColor = 'NavajoWhite';
+      myCircle.strokeWidth = 15.0;
     } else {
       testResult = false;
-      // trigger.triggerOn();
-      available = true;
-      oldAvailable = true;
+      trigger.triggerOn();
+      myCircle.fillColor = clr1;
+      myCircle.strokeColor = null;
     }
     return testResult;
   }
 
   function triggerEvent(){
     // if(available!=oldAvailable){
-    if(oldAvailable){
+    // if(oldAvailable){
       trigger.triggerEvent(trigEvent);
-    }
-    oldAvailable = available;
+      // available = false;
+    // }
+    // oldAvailable = available;
+    // console.log("oldAvailable" + oldAvailable);
   }
 
   function distanceTest(testPosition) {
@@ -244,6 +264,8 @@ function createPulse(constructPos) {
 
 function createMovr(constructPos) {
 
+  var movrLength = 200;
+
   var myShape = new paper.Path();
   var originalPos = constructPos;
 
@@ -258,7 +280,7 @@ function createMovr(constructPos) {
   var dest = new paper.Point(originalPos.x + normed.x * 100, originalPos.y + normed.y * 100);
 
   var from = originalPos;
-  var to = dest;
+  var to = originalPos;
   var movePath = new Path.Line(from, to);
   movePath.strokeColor = 'NavajoWhite';
   movePath.strokeWidth = '5.0';
@@ -298,7 +320,7 @@ function createMovr(constructPos) {
 
   function loop(rotrPos) {
     if(movng){
-      dist = easeOutExpo(life, 0, 100, 100)
+      dist = easeOutExpo(life, 0, movrLength, movrLength)
       newPos = new paper.Point(originalPos.x + (normed.x * dist), originalPos.y + (normed.y * dist));
       var startPos = new paper.Point(originalPos.x - (normed.x * dist), originalPos.y - (normed.y * dist));
       movePath.segments[1].point = newPos;
@@ -308,7 +330,7 @@ function createMovr(constructPos) {
       startShape.position = startPos;
 
       life += 1;
-      if(dist >= 100){
+      if(dist >= movrLength){
         // dist = 0;
         life = 0;
         thisShape.position = originalPos;

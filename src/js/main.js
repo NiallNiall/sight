@@ -94,26 +94,55 @@ paper.install(window);
 
       for(var i =0; i<allSteps.length; i++){
         // console.log(counttt);
-        allSteps[i].distanceTest(rotrPos);
+        // allSteps[i].distanceTest(rotrPos);
       }
 
-      var trigTest = function(){
-        console.log("yoyo");
-      }
+      // var booler = true;
 
         for(var j =0; j<allSteps.length; j++){
+
+            var booler = allSteps[j].getAvail();
+            console.log("allsteps " + j + " " + booler);
+
+          //need to add a checkbool array!
+
+           // Set the initial boolean to be false
            var checkBool = false; 
-            for(var i =0; i<movrs.length; i++){
+
+           // check boolean against main Rotr
+           var checkRotr = allSteps[j].checkDistance(rotrPos);
+           if(checkRotr){
+            checkBool = true;
+           }
+
+          // check boolean against all movrs
+          for(var i =0; i<movrs.length; i++){
+
               var comparePos = movrs[i].getPosition();
               // console.log(comparePos);
-              checkBool = allSteps[j].checkDistance(comparePos);
-              // console.log(checkBool);
-            }
-          if(checkBool) {
-            allSteps[j].triggerEvent();
-          } else {
 
+              var checkMovr = allSteps[j].checkDistance(comparePos);
+              if(checkMovr){
+                checkBool = true;
+               }
+
+              // console.log(checkBool);
+              // console.log("allSteps: " + j + "  movrs: " + i + " checkBool: " + checkBool);
+            }
+            // console.log("allSteps: " + j + "  movrs: " + i + " checkBool: " + checkBool);
+
+
+
+          if(checkBool) {
+            // var availVar = get
+            allSteps[j].triggerEvent();
+            // allSteps[j].setAvail(false);
+          } else {
+            // checkBool = false;
+           // booler = allSteps[j].getAvail();
+           // allSteps[j].setAvail(true);
           }
+          // booler = allSteps[j].getAvail();
       }
 
       for(var i =0; i<movrs.length; i++){
