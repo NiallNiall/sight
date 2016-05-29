@@ -91,9 +91,29 @@ paper.install(window);
 
 
       counttt +=1;
+
       for(var i =0; i<allSteps.length; i++){
         // console.log(counttt);
         allSteps[i].distanceTest(rotrPos);
+      }
+
+      var trigTest = function(){
+        console.log("yoyo");
+      }
+
+        for(var j =0; j<allSteps.length; j++){
+           var checkBool = false; 
+            for(var i =0; i<movrs.length; i++){
+              var comparePos = movrs[i].getPosition();
+              // console.log(comparePos);
+              checkBool = allSteps[j].checkDistance(comparePos);
+              // console.log(checkBool);
+            }
+          if(checkBool) {
+            allSteps[j].triggerEvent();
+          } else {
+
+          }
       }
 
       for(var i =0; i<movrs.length; i++){
@@ -105,7 +125,7 @@ paper.install(window);
       if(selectr == oldSelector) {
         // Do NOTHING
       } else {
-        console.log("selector changed to " + selectr);
+        // console.log("selector changed to " + selectr);
         selectionIcon();
       }
       oldSelector = selectr;

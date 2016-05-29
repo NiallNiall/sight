@@ -69,6 +69,9 @@ function createTrigger() {
 
 function createStep(constructPos, clr) {
 
+    var available = true;
+    var oldAvailable = available;
+
     var trigEvent = function(){
     };
 
@@ -95,7 +98,10 @@ function createStep(constructPos, clr) {
     distanceTest: distanceTest,
     drawStep: drawStep,
     createShape: createShape,
-    setTrigEvent: setTrigEvent
+    setTrigEvent: setTrigEvent,
+    checkDistance: checkDistance,
+    triggerEvent: triggerEvent,
+    available: available
   }
 
   return step;
@@ -106,6 +112,37 @@ function createStep(constructPos, clr) {
 
   function getPosition() {
     return position;
+  }
+
+  function getAvail(){
+    var rtnavail = available;
+    return rtnavail;
+  }
+
+  function checkDistance(testPosition) {
+
+    var distGap = position.subtract(testPosition);
+    var testResult = false;
+
+    if(distGap.length < 25) {
+      testResult = true;
+      // trigger.triggerEvent(trigEvent);
+      available = false;
+    } else {
+      testResult = false;
+      // trigger.triggerOn();
+      available = true;
+      oldAvailable = true;
+    }
+    return testResult;
+  }
+
+  function triggerEvent(){
+    // if(available!=oldAvailable){
+    if(oldAvailable){
+      trigger.triggerEvent(trigEvent);
+    }
+    oldAvailable = available;
   }
 
   function distanceTest(testPosition) {
@@ -210,6 +247,8 @@ function createMovr(constructPos) {
   var myShape = new paper.Path();
   var originalPos = constructPos;
 
+  var newPos = new paper.Point(100,100);
+
   var center = paper.view.center;
   // console.log(center);
 
@@ -235,11 +274,13 @@ function createMovr(constructPos) {
     shape: thisShape,
     create: create,
     loop: loop,
-    start: start
+    start: start,
+    getPosition: getPosition
   }
   // create(constructPos);
 
   var thisShape = create(constructPos);
+  var startShape = create(constructPos);
 
   function create(constructPos) {
     myShape = new paper.Path.Circle(constructPos, 10);
@@ -248,23 +289,32 @@ function createMovr(constructPos) {
     // movng = true;
   }
 
+  function getPosition(){
+    var returnPos = newPos;
+    return returnPos;
+  }
+
   var dist = 0;
 
   function loop(rotrPos) {
     if(movng){
       dist = easeOutExpo(life, 0, 100, 100)
-      var newPos = new paper.Point(originalPos.x + (normed.x * dist), originalPos.y + (normed.y * dist));
+      newPos = new paper.Point(originalPos.x + (normed.x * dist), originalPos.y + (normed.y * dist));
       var startPos = new paper.Point(originalPos.x - (normed.x * dist), originalPos.y - (normed.y * dist));
       movePath.segments[1].point = newPos;
       movePath.segments[0].point = startPos;
       // console.log(movePath.segments[1].point);
       thisShape.position = newPos;
+      startShape.position = startPos;
 
       life += 1;
       if(dist >= 100){
         // dist = 0;
         life = 0;
         thisShape.position = originalPos;
+        startShape.position = originalPos;
+        movePath.segments[1].point = originalPos;
+        movePath.segments[0].point = originalPos;
         movng = false;
       }
       // console.log(originalPos);
