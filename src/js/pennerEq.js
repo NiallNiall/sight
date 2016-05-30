@@ -123,3 +123,24 @@
     if (t < d/2) return easeInBounce (x, t*2, 0, c, d) * .5 + b;
     return easeOutBounce (x, t*2-d, 0, c, d) * .5 + c*.5 + b;
   }
+
+
+
+
+
+
+
+
+
+
+
+// Converts from degrees to radians.
+Math.radians = function(degrees) {
+  return degrees * Math.PI / 180;
+};
+
+
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
