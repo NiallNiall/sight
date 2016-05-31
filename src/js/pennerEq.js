@@ -144,3 +144,8 @@ function randomIntFromInterval(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
+
+
+function isInArray(value, array) {
+  return array.indexOf(value) > -1;
+}

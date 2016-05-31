@@ -2,25 +2,12 @@ function createTrigger() {
 
   var available = true;
 
-  // function randomNote()
-  // {
-  //     var text = "";
-  //     var possible = "CEGA";
-
-  //     for( var i=0; i < 1; i++ )
-  //         text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  //     return text;
-  // }
-
-  // var pitch = randomNote();
-
   var trigger = {
     available: true,
     triggerEvent: triggerEvent,
     triggerOff: triggerOff,
     triggerOn: triggerOn,
-    getPrivateAvailable: getPrivateAvailable,
+    getAvailable: getAvailable,
     setPitch: setPitch
   };
 
@@ -37,8 +24,7 @@ function createTrigger() {
   }
 
   function sendMessage() {
-    // console.log("Note Triggered!");
-    // synthVar.triggerAttackRelease("16n");
+
   }
 
   function triggerOff() {
@@ -49,7 +35,7 @@ function createTrigger() {
     available = true;
   }
 
-  function getPrivateAvailable() {
+  function getAvailable() {
     return available;
   }
 
@@ -69,8 +55,19 @@ function createTrigger() {
 
 function createStep(constructPos, clr) {
 
+    // Set Availability Boolean
     var available = true;
+    // Create a copy to store previous state
     var oldAvailable = available;
+
+    // Create an instance of a trigger
+    var trigger = createTrigger();
+    // Set Colour to the constructor colour
+    var clr1 = clr;
+    // Set Position to the constructor position
+    var position = constructPos;
+    // Create an empty shape
+    var thisShape = new paper.Path();
 
     var trigEvent = function(){
     };
@@ -79,15 +76,19 @@ function createStep(constructPos, clr) {
       trigEvent = trigEventVar;
     }
 
-    var clr1 = clr;
-
-    var trigger = createTrigger();
-
-    var position = constructPos;
-    var myCircle = new paper.Path;
-
     function createShape(shape){
-      myCircle = shape;
+      thisShape = shape;
+      thisShape.fillColor = clr1;
+    }
+
+    function shapeOn(){
+      thisShape.strokeColor = 'NavajoWhite';
+      thisShape.strokeWidth = 15.0;
+    }
+
+    function shapeOff(){
+      thisShape.fillColor = clr1;
+      thisShape.strokeColor = null;
     }
 
 
@@ -95,7 +96,6 @@ function createStep(constructPos, clr) {
     position: getPosition,
     // stepTrig: createTrigger,
     radius: Math.random() * 100,
-    distanceTest: distanceTest,
     drawStep: drawStep,
     createShape: createShape,
     setTrigEvent: setTrigEvent,
@@ -103,9 +103,7 @@ function createStep(constructPos, clr) {
     triggerEvent: triggerEvent,
     available: available,
     getAvail: getAvail,
-    setAvail: setAvail,
-    getOldAvail: getOldAvail,
-    setOldAvail: setOldAvail
+    setAvail: setAvail
   }
 
   return step;
@@ -123,19 +121,7 @@ function createStep(constructPos, clr) {
     return rtnavail;
   }
 
-  function setAvail(availBit){
-    available = availBit;
-  }
-
-  function getOldAvail(){
-    var rtnavail = oldAvailable;
-    return rtnavail;
-  }
-
-  function setOldAvail(availBit){
-    oldAvailable = availBit;
-  }
-
+  // Check the distance between passed Variable and this one.
   function checkDistance(testPosition) {
 
     var distGap = position.subtract(testPosition);
@@ -143,43 +129,37 @@ function createStep(constructPos, clr) {
 
     if(distGap.length < 25) {
       testResult = true;
-      // trigger.triggerEvent(trigEvent);
-      myCircle.strokeColor = 'NavajoWhite';
-      myCircle.strokeWidth = 15.0;
     } else {
       testResult = false;
-      trigger.triggerOn();
-      myCircle.fillColor = clr1;
-      myCircle.strokeColor = null;
     }
     return testResult;
   }
 
-  function triggerEvent(){
-    // if(available!=oldAvailable){
-    // if(oldAvailable){
-      trigger.triggerEvent(trigEvent);
-      // available = false;
-    // }
-    // oldAvailable = available;
-    // console.log("oldAvailable" + oldAvailable);
+  function setAvail(availBit){
+    available = availBit;
+    if(oldAvailable == available){
+
+    } else {
+      if(!available) {
+        console.log("out");
+        triggerEvent();
+      } else {
+        console.log("in");
+        triggerOn();
+      }
+    }
+    oldAvailable = available;
+
   }
 
-  function distanceTest(testPosition) {
-
-    var distGap = position.subtract(testPosition);
-    // console.log(distGap.length);
-
-    if(distGap.length < 25) {
+  function triggerEvent(){
       trigger.triggerEvent(trigEvent);
-      // myCircle.fillColor = 'Black';
-      myCircle.strokeColor = 'NavajoWhite';
-      myCircle.strokeWidth = 15.0;
-    } else {
+      shapeOn();
+  }
+
+  function triggerOn(){
       trigger.triggerOn();
-      myCircle.fillColor = clr1;
-      myCircle.strokeColor = null;
-    }
+      shapeOff();
   }
 
 }
@@ -324,10 +304,10 @@ function createMovr(constructPos) {
       newPos = new paper.Point(originalPos.x + (normed.x * dist), originalPos.y + (normed.y * dist));
       var startPos = new paper.Point(originalPos.x - (normed.x * dist), originalPos.y - (normed.y * dist));
       movePath.segments[1].point = newPos;
-      movePath.segments[0].point = startPos;
+      // movePath.segments[0].point = startPos;
       // console.log(movePath.segments[1].point);
       thisShape.position = newPos;
-      startShape.position = startPos;
+      // startShape.position = startPos;
 
       life += 1;
       if(dist >= movrLength){
@@ -378,102 +358,3 @@ function createTriangr(constructPos) {
 
 }
 
-
-// t: current time, b: begInnIng value, c: change In value, d: duration
-function easeInQuad(t, b, c, d) {
-    return c*(t/=d)*t + b;
-}
-
-function easeInOutExpo(t, b, c, d) {
-    if (t==0) return b;
-    if (t==d) return b+c;
-    if ((t/=d/2) < 1) return c/2 * Math.pow(2, 10 * (t - 1)) + b;
-    return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
-  }
-function easeInExpo(t, b, c, d) {
-    return (t==0) ? b : c * Math.pow(2, 10 * (t/d - 1)) + b;
-  }
-function  easeOutExpo(t, b, c, d) {
-    return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
-  }
-
-
-// function createSnareTrigger() {
-
-//   var snare = createTrigger();
-
-//   snare.bark = function(){
-//       console.log("Woof!");
-//   };
-
-//   return snare;
-// }
-
-
-
-// var dog = createDog();
-// dog.bark();
-// dog.sendMessage();
-
-
-
-
-
-// var Trigger = function (testVar) {
-//   console.log(testVar + ' created!');
-
-//   this.triggerName = testVar;
-//   this.triggerAvail = true;
-// };
-
-// Trigger.prototype.triggerEvent = function(){
-
-
-//     if (this.triggerAvail) {
-//       this.triggerOff();
-//       this.sendTrigger();
-//     }
-
-
-// };
-
-// Trigger.prototype.sendTrigger = function(){
-//   console.log(this.triggerName + " triggered!");
-// };
-
-// Trigger.prototype.triggerOff = function(){
-//   this.triggerAvail = false;
-// };
-
-// Trigger.prototype.triggerOn = function(){
-//   this.triggerAvail = true;
-// };
-
-
-// // ===============================================================
-// // ===============================================================
-
-
-// var drumStep = function () {
-
-//   var drumTrigger = new Trigger("SuperTrig");
-
-// };
-
-// drumStep.prototype.drawTrig = function(){
-
-// }
-
-// drumStep.prototype.distanceTest = function(){
-
-// }
-
-
-// // ===============================================================
-// // ===============================================================
-
-// var snareStep = function() {
-//   // this.setName("I'm SubClass1");
-// }
-
-// extend(snareStep, drumStep);

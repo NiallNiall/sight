@@ -10,7 +10,7 @@ function createTwig(constructPos) {
 
 	leaf = leafSym.place(constructPos);
 	if(rndFlip < 0){
-		leaf.scaling = (1,-1);
+		leaf.scaling = (-1,-1);
 	} else {
 		leaf.scaling = (1, 1);
 	}

@@ -3,7 +3,6 @@
 }()); // end 'use strict'
 
 
-
 paper.install(window);
   // Only executed our code once the DOM is ready.
   window.onload = function() {
@@ -17,11 +16,9 @@ paper.install(window);
     // Create an empty array of twigs
     var allTwigs = [];
 
-    var Item = new Symbol();
-    // var leaf = new Symbol();
-
     project.importSVG('/img/leaf.svg', function(item) {
-        // console.log(item);
+        
+        // Scale the Twig down
         item.scale(0.15, -0.15);
         // item.rotate(140);
         leafSym = new Symbol(item);
@@ -48,7 +45,7 @@ paper.install(window);
 
     mouseTool.onMouseDown = function(event) {
       // leaf = Item.place(event.point);
-      var tempTwig = createTwig(event.point);
+      var tempTwig = createTwig(new paper.Point(event.point.x, paper.view.center.y));
       allTwigs.push(tempTwig);
     }
 
