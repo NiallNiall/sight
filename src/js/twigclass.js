@@ -1,4 +1,74 @@
-function createTwig(constructPos) {
+function createTrigger() {
+
+  var available = true;
+
+  var trigger = {
+    available: true,
+    triggerEvent: triggerEvent,
+    triggerOff: triggerOff,
+    triggerOn: triggerOn,
+    getAvailable: getAvailable,
+    setPitch: setPitch
+  };
+
+  return trigger;
+
+  function triggerEvent() {
+
+    if(available){
+      // trigEventVar();
+      sendMessage();
+      triggerOff();
+    }
+
+  }
+
+  function randomNote()
+  {
+      var text = "";
+      var possible = "CEGA";
+
+      for( var i=0; i < 1; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      return text;
+  }
+
+  function sendMessage() {
+  	// console.log("Boom!");
+  	var note = randomNote() + '4';
+  	synth.triggerAttackRelease(note, "32n");
+  }
+
+  function triggerOff() {
+    available = false;
+  }
+
+  function triggerOn() {
+    available = true;
+  }
+
+  function getAvailable() {
+    return available;
+  }
+
+  function setPitch(){
+
+  }
+
+  function setSynth(synthVar){
+
+  }
+
+}
+
+
+
+function createTwig(constructPos, groupVar) {
+
+
+	// Create an instance of a trigger
+    var trigger = createTrigger();
 
 	// Set Availability Boolean
     var available = true;
@@ -14,6 +84,9 @@ function createTwig(constructPos) {
 	var leafFlipped = true;
 
 	leaf = leafSym.place(constructPos);
+	// Add the paths to the group:
+	groupVar.addChild(leaf);
+
 	if(rndFlip < 0){
 		leaf.scaling = (-1,-1);
 	} else {
@@ -33,12 +106,15 @@ function createTwig(constructPos) {
 	}
 
 	// set Initial count to 0
-	var testRot  = 0;
+	var testRot  = 3;
 	// Set length of animation
 	var animTime = 100;
 	// Set amount of animation
 	var animAmt = 120;
 
+
+	leaf.rotation = easeOutExpo(testRot, 0, animAmt, animTime);
+	
 	function loop(){
 
 		if(movng){
@@ -46,7 +122,7 @@ function createTwig(constructPos) {
 				testRot += 2;
 				leaf.rotation = easeOutExpo(testRot, 0, animAmt, animTime);
 			} else {
-				testRot = 0;
+				testRot = 3;
 				leaf.rotation = easeOutExpo(testRot, 0, animAmt, animTime);
 				movng = false;
 			}
@@ -95,10 +171,11 @@ function createTwig(constructPos) {
 
   function triggerEvent(){
       movng = true;
+      trigger.triggerEvent();
   }
 
   function triggerOn(){
-      // trigger.triggerOn();
+      trigger.triggerOn();
       // shapeOff();
   }
 

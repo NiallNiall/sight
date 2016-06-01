@@ -69,8 +69,6 @@ function createStep(constructPos, clr) {
     // Create an empty shape
     var thisShape = new paper.Path();
 
-    var trigEvent = function(){
-    };
 
     var setTrigEvent = function(trigEventVar) {
       trigEvent = trigEventVar;

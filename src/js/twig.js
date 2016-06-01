@@ -2,6 +2,10 @@
 
 }()); // end 'use strict'
 
+//create one of Tone's built-in synthesizers and connect it to the master output
+var synth = new Tone.SimpleSynth().toMaster();
+synth.oscillator.type = "sine";
+
 
 paper.install(window);
   // Only executed our code once the DOM is ready.
@@ -30,6 +34,8 @@ paper.install(window);
     // Set scroller
     var countr = 1;
 
+
+
     // Create a vector for the playhead
     var playHeadPos = new paper.Point(paper.view.center);
     // and a vector for the Canvas Centre
@@ -40,11 +46,7 @@ paper.install(window);
     var halfPHLength = playHeadLength / 2;
 
     // Create Branch Object
-    var from = new Point(centerPos.x-halfPHLength, centerPos.y);
-    var to = new Point(centerPos.x+halfPHLength, centerPos.y);
-
-    // path.add(new Point(30, 30));
-    // var branch = new paper.Path.Line(from, to);
+    var branch = new paper.Path();
 
     var startPos = centerPos.x-halfPHLength;
     var endPos = centerPos.x+halfPHLength;
@@ -60,11 +62,22 @@ paper.install(window);
     branch.strokeWidth = '8.0';
     branch.strokeCap = 'round';
 
+    // Create an top group:
+    var baseGroup = new Group();
+    // Create an top group:
+    var midGroup = new Group();
+    // Create an top group:
+    var topGroup = new Group();
+
     // Create Playhead Object
     var playHead = new paper.Path.Circle(playHeadPos, 10);
     playHead.fillColor = 'Tomato';
     playHead.strokeColor = '#FCF7E9';
     playHead.strokeWidth = 5.0;
+
+    // Add the paths to the group:
+    topGroup.addChild(playHead);
+    
 
 
     paper.view.onFrame = function(event) {
@@ -97,7 +110,8 @@ paper.install(window);
       var leftBoundary = centerPos.x-halfPHLength;
       var rightBoundary = centerPos.x+halfPHLength;
       if(mouseXPos > leftBoundary && mouseXPos < rightBoundary ) {
-        var tempTwig = createTwig(new paper.Point(event.point.x, paper.view.center.y));
+        var tempTwig = createTwig(new paper.Point(event.point.x, paper.view.center.y), midGroup);
+
         allTwigs.push(tempTwig);
       }
     }
