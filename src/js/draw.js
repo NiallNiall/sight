@@ -89,25 +89,52 @@ paper.install(window);
         pointPos = 0.001;
       }
 
-      var getLength = branch.length;
+      var tempBranch = branches[branches.length-1];
+
+      var getLength = tempBranch.length;
       // console.log(getLength);
       var pos = getLength * pointPos;
 
-      playHeadPos = branch.getPointAt(pos);
+
+      playHeadPos = tempBranch.getPointAt(pos);
       // console.log(pointPos);
       playHead.position = playHeadPos;
 
 
     }
 
+    var branches = [];
+
+    // var newBranch = new paper.Path();
+    //     newBranch.add(startPos);
+    //     newBranch.add(endPos);
+    //     newBranch.strokeColor = 'Black';
+    //     branches.push(newBranch);
 
     var mouseTool = new paper.Tool();
 
-    mouseTool.onMouseDrag = function(event) {
 
-      branch.add(event.point);
+
+    mouseTool.onMouseDown = function(event) {
+        var newBranch = new paper.Path();
+        newBranch.strokeColor = 'Black';
+        newBranch.strokeWidth = 3.0;
+        newBranch.strokeCap = 'round';
+        branches.push(newBranch);
+    }
+
+    mouseTool.onMouseDrag = function(event) {
+        var tempBranch = branches[branches.length-1];
+        console.log(tempBranch);
+        tempBranch.add(event.point);
+      // branch.add(event.point);
       // branch.add(paper.view.center);
 
+    }
+
+    mouseTool.onMouseUp = function(event) {
+        // Add the mouse up position:
+        // path.add(event.point);
     }
 
     // Draw the view now:
