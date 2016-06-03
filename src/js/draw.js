@@ -70,13 +70,13 @@ paper.install(window);
     var topGroup = new Group();
 
     // Create Playhead Object
-    var playHead = new paper.Path.Circle(playHeadPos, 15);
-    playHead.fillColor = 'Tomato';
-    playHead.strokeColor = '#FCF7E9';
-    playHead.strokeWidth = 5.0;
+    // var playHead = new paper.Path.Circle(playHeadPos, 15);
+    // playHead.fillColor = 'Tomato';
+    // playHead.strokeColor = '#FCF7E9';
+    // playHead.strokeWidth = 5.0;
 
     // Add the paths to the group:
-    topGroup.addChild(playHead);
+    // topGroup.addChild(playHead);
 
 
     var pointPos = 0.01;
@@ -89,16 +89,20 @@ paper.install(window);
         pointPos = 0.001;
       }
 
-      var tempBranch = branches[branches.length-1];
+      // var tempBranch = branches[branches.length-1];
 
-      var getLength = tempBranch.length;
+      // var getLength = tempBranch.length;
       // console.log(getLength);
-      var pos = getLength * pointPos;
+      // var pos = getLength * pointPos;
+
+      for(var i = 0; i <branches.length; i++){
+        branches[i].loop();
+      }
 
 
-      playHeadPos = tempBranch.getPointAt(pos);
+      // playHeadPos = tempBranch.getPointAt(pos);
       // console.log(pointPos);
-      playHead.position = playHeadPos;
+      // playHead.position = playHeadPos;
 
 
     }
@@ -116,17 +120,17 @@ paper.install(window);
 
 
     mouseTool.onMouseDown = function(event) {
-        var newBranch = new paper.Path();
-        newBranch.strokeColor = 'Black';
-        newBranch.strokeWidth = 3.0;
-        newBranch.strokeCap = 'round';
+        var newBranch = createVein(event.point);
+        // newBranch.strokeColor = 'Black';
+        // newBranch.strokeWidth = 3.0;
+        // newBranch.strokeCap = 'round';
         branches.push(newBranch);
     }
 
     mouseTool.onMouseDrag = function(event) {
         var tempBranch = branches[branches.length-1];
-        console.log(tempBranch);
-        tempBranch.add(event.point);
+        // console.log(tempBranch);
+        tempBranch.addPoints(event.point);
       // branch.add(event.point);
       // branch.add(paper.view.center);
 
