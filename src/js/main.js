@@ -86,7 +86,7 @@ paper.view.onFrame = function(event) {
     // check Boolean against main Rotr
     var checkRotr = allSteps[i].checkDistance(rotrPos);
     boolArray.push(checkRotr);
-  
+
 
     // check boolean against all movrs
     for(var j =0; j<movrs.length; j++){
@@ -102,7 +102,7 @@ paper.view.onFrame = function(event) {
       // console.log(checkBool);
       // console.log("allSteps: " + j + "  movrs: " + i + " checkBool: " + checkBool);
       }
-  
+
     // For Debugging, log the array.
     // console.log(boolArray);
 

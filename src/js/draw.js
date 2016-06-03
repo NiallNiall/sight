@@ -2,6 +2,14 @@
 
 }()); // end 'use strict'
 
+var fbDelay = new Tone.FeedbackDelay("8n", 0.4).toMaster();
+
+//create one of Tone's built-in synthesizers and connect it to the master output
+var synth = new Tone.SimpleSynth().connect(fbDelay);
+synth.oscillator.type = "triangle";
+
+
+
 paper.install(window);
   // Only executed our code once the DOM is ready.
   window.onload = function() {
@@ -30,6 +38,18 @@ paper.install(window);
     var countr = 1;
 
 
+    var steps = [];
+
+    for(var i = 50; i < paper.view.bounds.width-50; i +=50){
+        for(var j = 50; j < paper.view.bounds.height-50; j +=50){
+            var tempStep = createKick(new paper.Point(i, j));
+            var note = i;
+            var octave = j;
+            tempStep.setPitch(note, octave)
+            steps.push(tempStep);
+        }
+    }
+
 
     // Create a vector for the playhead
     var playHeadPos = new paper.Point(paper.view.center);
@@ -47,16 +67,9 @@ paper.install(window);
     var endPos = centerPos.x+halfPHLength;
 
     var branch = new paper.Path();
-    // for(var i = startPos; i<endPos; i+=20){
-    //   var x = i;
-    //   var y = centerPos.y + randomIntFromInterval(-2, 3);
-    //   branch.add(new Point(x, y));
-    // }
 
     branch.add(view.center);
     branch.add(view.center);
-    // branch.add(new paper.Point(startPos, view.center.y));
-    // branch.add(new paper.Point(endPos, view.center.y));
 
     branch.strokeColor = '#8E6008';
     branch.strokeWidth = '8.0';
@@ -69,15 +82,6 @@ paper.install(window);
     // Create an top group:
     var topGroup = new Group();
 
-    // Create Playhead Object
-    // var playHead = new paper.Path.Circle(playHeadPos, 15);
-    // playHead.fillColor = 'Tomato';
-    // playHead.strokeColor = '#FCF7E9';
-    // playHead.strokeWidth = 5.0;
-
-    // Add the paths to the group:
-    // topGroup.addChild(playHead);
-
 
     var pointPos = 0.01;
 
@@ -89,31 +93,48 @@ paper.install(window);
         pointPos = 0.001;
       }
 
-      // var tempBranch = branches[branches.length-1];
 
-      // var getLength = tempBranch.length;
-      // console.log(getLength);
-      // var pos = getLength * pointPos;
+      for(var i = 0; i <veins.length; i++){
+        veins[i].loop();
 
-      for(var i = 0; i <branches.length; i++){
-        branches[i].loop();
+        // var veinPos = veins[i].getPHPos();
+
+
       }
 
+      for(var i = 0; i < steps.length; i++){
 
-      // playHeadPos = tempBranch.getPointAt(pos);
-      // console.log(pointPos);
-      // playHead.position = playHeadPos;
+        steps[i].loop();
+
+        // Create an empty array for the Booleans
+        var boolArray = [];
+
+        for(var j = 0; j < veins.length; j++){
+            var veinPos = veins[j].getPHPos();
+
+            var checkMovr = steps[i].checkDistance(veinPos);
+            boolArray.push(checkMovr);
+
+            // console.log(checkMovr);
+        }
+
+        // Check if any Bools return positive.
+        var logr = isInArray(true, boolArray);
+
+        // If they do, then set state of the step.
+        if(logr) {
+          steps[i].setAvail(false);
+        } else {
+          steps[i].setAvail(true);
+        }
+
+      }
 
 
     }
 
-    var branches = [];
+    var veins = [];
 
-    // var newBranch = new paper.Path();
-    //     newBranch.add(startPos);
-    //     newBranch.add(endPos);
-    //     newBranch.strokeColor = 'Black';
-    //     branches.push(newBranch);
 
     var mouseTool = new paper.Tool();
 
@@ -121,24 +142,17 @@ paper.install(window);
 
     mouseTool.onMouseDown = function(event) {
         var newBranch = createVein(event.point);
-        // newBranch.strokeColor = 'Black';
-        // newBranch.strokeWidth = 3.0;
-        // newBranch.strokeCap = 'round';
-        branches.push(newBranch);
+        veins.push(newBranch);
     }
 
     mouseTool.onMouseDrag = function(event) {
-        var tempBranch = branches[branches.length-1];
-        // console.log(tempBranch);
+        var tempBranch = veins[veins.length-1];
         tempBranch.addPoints(event.point);
-      // branch.add(event.point);
-      // branch.add(paper.view.center);
 
     }
 
     mouseTool.onMouseUp = function(event) {
-        // Add the mouse up position:
-        // path.add(event.point);
+
     }
 
     // Draw the view now:
