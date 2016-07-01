@@ -1,9 +1,6 @@
 function createVein(initialPos) {
 
   var veinPath = new paper.Path();
-      // veinPath.strokeColor = 'Tomato';
-      // veinPath.strokeWidth = 3.0;
-      // veinPath.strokeCap = 'round';
       veinPath.add(initialPos);
       veinPath.add(initialPos);
 
@@ -13,11 +10,6 @@ function createVein(initialPos) {
 
   var playHeadPos = initialPos;
 
-  // var startShape = new paper.Path.Circle(initialPos, 10);
-  // startShape.fillColor = 'Tomato';
-
-  // var endShape = new paper.Path.Circle(initialPos, 10);
-  // endShape.fillColor = 'Tomato';
 
   var vein = {
     veinPath: veinPath,
@@ -27,6 +19,7 @@ function createVein(initialPos) {
     getPHPos: getPHPos
   }
 
+  var smlBranches = [];
 
   function addPoints(pointPos) {
       var segLength = veinPath.segments.length-1;
@@ -43,56 +36,128 @@ function createVein(initialPos) {
       // console.log(line);
 
 
+      var branchProbability = 0.1;
 
-       var randomBranch = Math.random() < 0.2 ? true: false;
-
-      // var randomNumber = Math.random() >= 0.5;
-      // console.log(randomNumber);
+      var randomBranch = Math.random() < branchProbability ? true: false;
 
       if(randomBranch){
-          makeSmallBranch(getLastPos, pointPos);
+          var newBranch = makeSmallBranch(getLastPos, pointPos, 1);
+          smlBranches.push(newBranch);
+          var newBranch = makeSmallBranch(getLastPos, pointPos, -1);
+          smlBranches.push(newBranch);
       }
 
-      // var branchTest = randomIntFromInterval(0,2);
-
-      // var randomNumber = Math.random() >= 0.5;
-      // console.log(randomNumber);
-
-      // if(randomNumber){
-      //     makeSmallBranch(getLastPos, pointPos);
-      // }
   }
 
 
-  function makeSmallBranch(thisPos, prevPos){
+  // function makeSmallBranch(thisPos, prevPos){
+
+  //     var smlBranchStart = thisPos;
+  //     var smlBranchEnd = prevPos;//new paper.Point(thisPos.x, thisPos.y);
+
+
+  //     var tempVec = smlBranchEnd.subtract(smlBranchStart);
+  //     var perpVecR = new paper.Point(tempVec.x-tempVec.y*-1, tempVec.y-tempVec.x);
+  //     var perpVecL = new paper.Point(tempVec.x-tempVec.y, tempVec.y-tempVec.x*-1);
+
+  //     var dirVecR = perpVecR.normalize();
+
+  //     var dirVecL = perpVecL.normalize();
+  //     // console.log(dirVec);
+
+  //     var newEndR = smlBranchStart.add(dirVecR.multiply(75));
+
+  //     var smlBranchR = new Path.Line(smlBranchStart, newEndR);
+  //     smlBranchR.strokeColor = Color.random();
+  //     smlBranchR.strokeWidth = 8.0;
+  //     smlBranchR.strokeCap = 'round';
+
+  //     var newEndL = smlBranchStart.add(dirVecL.multiply(75));
+
+  //     var smlBranchL = new Path.Line(smlBranchStart, newEndL);
+  //     smlBranchL.strokeColor = Color.random();
+  //     smlBranchL.strokeWidth = 8.0;
+  //     smlBranchL.strokeCap = 'round';
+  // }
+
+
+function makeSmallBranch(thisPos, prevPos, dir){
 
       var smlBranchStart = thisPos;
-      var smlBranchEnd = prevPos;//new paper.Point(thisPos.x, thisPos.y);
+      var prevBranchPoint = prevPos;
+
+      var branchGrow = 10;
+
+      var tempVec = prevBranchPoint.subtract(smlBranchStart);
+
+      if(dir > .5){
+        var perpVecR = new paper.Point(tempVec.x-tempVec.y*-1, tempVec.y-tempVec.x);
+      } else {
+        var perpVecR = new paper.Point(tempVec.x-tempVec.y, tempVec.y-tempVec.x*-1);      
+      }
+
+      var branchDir = perpVecR.normalize();
+
+      // var newEndR = smlBranchStart.add(branchDir.multiply(75));
+
+      var smlBranchR = new Path();//.Line(smlBranchStart, newEndR);
+      // smlBranchR.strokeColor = Color.random();
+      // smlBranchR.strokeWidth = 4.0;
+      // smlBranchR.strokeCap = 'round';
+
+      smlBranchR.add(smlBranchStart);
+      smlBranchR.add(smlBranchStart.add(branchDir.multiply(branchGrow)));
+      // smlBranchR.add(smlBranchStart.add(dirVecR.multiply(75).subtract(10)));
+
+      // return smlBranchR;
+
+      var smlBranch = {
+        smlBranchR: smlBranchR,
+        grow: grow
+      }
 
 
-      var tempVec = smlBranchEnd.subtract(smlBranchStart);
-      var perpVecR = new paper.Point(tempVec.x-tempVec.y*-1, tempVec.y-tempVec.x);
-      var perpVecL = new paper.Point(tempVec.x-tempVec.y, tempVec.y-tempVec.x*-1);
+      function grow(){
+        if(branchGrow < 200) {
+          var branchPointAdd = smlBranchStart.add(branchDir.multiply(branchGrow).add(randomIntFromInterval(-5,5)));
+          smlBranchR.add(branchPointAdd);//smlBranchStart.add(branchDir.multiply(branchGrow).add(randomIntFromInterval(-5,5))));
 
-      var dirVecR = perpVecR.normalize();
+          var smlBranchSegLength = smlBranchR.segments.length-2;
+          var prevSmlBranchPos = smlBranchR.segments[smlBranchSegLength].point;
 
-      var dirVecL = perpVecL.normalize();
-      // console.log(dirVec);
+          console.log(prevSmlBranchPos);
+          var smlBranchPiece = new Path.Line(branchPointAdd, prevSmlBranchPos);
+          smlBranchPiece.strokeColor = Color.random();
+          smlBranchPiece.strokeWidth = (200-branchGrow)/25;
+          smlBranchPiece.strokeCap = 'round';
 
-      var newEndR = smlBranchStart.add(dirVecR.multiply(75));
+          branchGrow +=10;
+        } else {
+          // branchGrow = 150;
+        }
+      }
 
-      var smlBranchR = new Path.Line(smlBranchStart, newEndR);
-      smlBranchR.strokeColor = Color.random();
-      smlBranchR.strokeWidth = 8.0;
-      smlBranchR.strokeCap = 'round';
 
-      var newEndL = smlBranchStart.add(dirVecL.multiply(75));
+      console.log(smlBranches);
 
-      var smlBranchL = new Path.Line(smlBranchStart, newEndL);
-      smlBranchL.strokeColor = Color.random();
-      smlBranchL.strokeWidth = 8.0;
-      smlBranchL.strokeCap = 'round';
-  }
+      return smlBranch;
+}
+
+
+function smlBranch(tempVec) {
+  // var branch = new Path();
+
+  // var perpVecR = new paper.Point(tempVec.x-tempVec.y*-1, tempVec.y-tempVec.x);
+
+  // branch.add
+  // branch.add(smlBranchStart.add(dirVecR.multiply(75)));
+  // var dirVecR = perpVecR.normalize();
+  // var newEndR = smlBranchStart.add(dirVecR.multiply(75));
+  // var smlBranchR = new Path.Line(smlBranchStart, newEndR);
+
+  // return branch;
+}
+
 
 
   var pointPos = 0.001;
@@ -103,6 +168,10 @@ function createVein(initialPos) {
         pointPos += 0.005;
       } else {
         pointPos = 0.001;
+      }
+
+       for(var i = 0; i <smlBranches.length; i++){
+        smlBranches[i].grow();
       }
 
       // console.log(pointPos);

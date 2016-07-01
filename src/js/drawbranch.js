@@ -59,20 +59,12 @@ paper.install(window);
     var topGroup = new Group();
 
 
-    var pointPos = 0.01;
 
     paper.view.onFrame = function(event) {
-
-      if(pointPos <= 1){
-        pointPos += 0.005;
-      } else {
-        pointPos = 0.001;
-      }
 
 
       for(var i = 0; i <veins.length; i++){
         veins[i].loop();
-
       }
 
     }
