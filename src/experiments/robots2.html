@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>paperJS</title> <!-- ADD A TITLE! -->
+
+  <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,400i,600,600i" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css">
+
+</head>
+<body>
+
+ <!--  <div class="canvasheader">
+    <div class="col-1-1 home-header">
+      <a href="/">
+        <h1 class="home-logo">NH</h1>
+      </a>
+    </div>
+  </div> -->
+
+  <div class="canvasinfo rborder">
+      A Sequencer made by drawing lines.
+      paperJS and tone.js
+
+
+    <div class="canvasbuttons right">
+      <a class="boldlink" href="/">Experiments</a>
+      <a class="boldlink" href="paperjs.html">Previous</a>
+      <a class="boldlink" href="robots2.html">Next</a>
+    </div>
+  </div>
+
+
+  <canvas id="robocanvas" class="bgcanvas drkcanvas" resize></canvas>
+
+   <script src="/js/vendor/paper-full.js"></script>
+  <script src="/js/vendor/Tone.js"></script>
+  <script src="/js/pennerEq.js"></script>
+    <script type="text/paperscript" canvas="robocanvas" src="/js/robots/straight.js"></script>
+
+</body>
+</html>

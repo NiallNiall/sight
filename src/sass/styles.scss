@@ -7,46 +7,37 @@
 // define mixins & functions
 @import "_mixins.scss";
 
-//===============================================================================
-// VARIABLES
-//===============================================================================
-$paper:  white;
-$ink:    black;
 
-$bgColour: #FCF7E9;
+// Grid: Global grid styles and variables
+@import "shared/_fonts.scss";
+@import "shared/_global-variables.scss";
 
+// Shared components and styles
 //===============================================================================
-// BASCIS
-//===============================================================================
-*,
-*::before,
-*:after {
-  box-sizing: border-box;
-}
+// Grid: Global grid styles and variables
+@import "shared/_global-grid.scss";
 
-ul {
-  padding: 0;
-  list-style: none;
-}
+// Layout: Global base layout
+@import "shared/_layout.scss";
 
-html,
-body {
-  background-color: $paper;
-  color: $ink;
-  font-family: sans-serif;
-  line-height: 1.4;
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
+// Typography: Headings, hierachy etc.
+@import "shared/_typography.scss";
 
-//===============================================================================
-// STYLES
-//===============================================================================
+// Elements: Forms, buttons, lists etc.
+@import "shared/_elements.scss";
 
-.fullWidthCanvas {
-  background: $bgColour;
-  width: 100%;
-  height: 100%;
-}
+// Global Header: Header visible globally
+@import "shared/_global-header.scss";
+
+// Global Footer: Footer visible globally
+@import "shared/_global-footer.scss";
+
+// Z-indices: keep track of the layer heirachy
+@import "shared/_z-indices.scss";
+
+
+// niall
+@import "_niall.scss";
+
+// niall
+@import "_canvasexp.scss";
